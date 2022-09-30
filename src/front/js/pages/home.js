@@ -1,26 +1,47 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 
 export const Home = () => {
-	const { store, actions } = useContext(Context);
+  const { store, actions } = useContext(Context);
 
-	return (
-		<div className="text-center mt-5">
-			<h1>Hello Rigo!!</h1>
-			<p>
-				<img src={rigoImageUrl} />
-			</p>
-			<div className="alert alert-info">
-				{store.message || "Loading message from the backend (make sure your python backend is running)..."}
-			</div>
-			<p>
-				This boilerplate comes with lots of documentation:{" "}
-				<a href="https://github.com/4GeeksAcademy/react-flask-hello/tree/95e0540bd1422249c3004f149825285118594325/docs">
-					Read documentation
-				</a>
-			</p>
-		</div>
-	);
+  useEffect(() => {
+    console.log(store.products.length);
+  })
+
+  return (
+    <>
+      { store.products.length <= 0 ?
+        <h1>Cargando datos...</h1> :
+        <div className="text-center mt-5">
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">name</th>
+              <th scope="col">descripcion </th>
+              <th scope="col">categoria</th>
+              <th scope="col">price</th>
+              <th scope="col">stock</th>
+            </tr>
+          </thead>
+          <tbody>
+            {store.products && store.products.length > 0
+              ? store.products[0].map((product, i) => {
+                  return (
+                    <tr key={i}>
+                      <td>{product.name}</td>
+                      <td>{product.description}</td>
+                      <td>{product.category}</td>
+                      <td>{product.price}</td>
+                      <td>{product.stock}</td>
+                    </tr>
+                  );
+                })
+              : null}
+          </tbody>
+        </table>
+      </div>
+      }    
+    </>
+  );
 };
